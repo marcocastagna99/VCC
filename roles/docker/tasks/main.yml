@@ -1,0 +1,37 @@
+---
+# tasks file for roles/docker
+
+# TODO: implement the tasks for Docker installation
+- name: Install Docker and Docker Compose packages
+  ansible.builtin.apt:
+    name: 
+      - docker.io
+      - docker-compose-v2
+      - docker-buildx
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker service is started and enabled
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Add vagrant user to docker group
+  ansible.builtin.user:
+    name: vagrant
+    groups: docker
+    append: yes
+
+
+
+- name: Check if docker command exists
+  ansible.builtin.shell: "command -v docker"
+  register: docker_check
+  ignore_errors: yes
+
+- name: Assert docker is NOT installed
+  ansible.builtin.assert:
+    that:
+      - docker_check.rc == 0
+    fail_msg: "Docker is not installed on this host."
