@@ -1,13 +1,4 @@
 ---
-# TODO: implement the tasks for NFS client setup. Make sure to use the storage network for NFS mount
-
-# - name: "Create NFS share directory"
-
-# - name: Install NFS client
-
-# - name: Mount NFS share
-# use storage network for NFS mount
-
 - name: "Create NFS share directory"
   ansible.builtin.file:
     path: "{{ data }}"

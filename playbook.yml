@@ -7,7 +7,7 @@
 #     - network_facts
 #     - nfs_server
 
-- hosts: targets[0]
+- hosts: targets
   gather_facts: no
   become: true
   roles:
