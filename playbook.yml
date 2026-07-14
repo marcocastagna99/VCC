@@ -7,25 +7,14 @@
 #     - network_facts
 #     - nfs_server
 
-- hosts: storage
+- hosts: targets[0]
   gather_facts: no
   become: true
-  vars:
-    nfs_dir: /data
   roles:
-    - network_facts
-    - nfs_server
-
-- hosts: targets
-  gather_facts: no
-  become: true
-  vars:
-    nfs_dir: /data
-    data: /data
-  roles:
+    - certs
     - { role: network_facts, tags: ['services', 'deploy'] }
     - datadir
-    - nfs_client
+    # - nfs_client
     - docker
     - { role: docker-images, tags: ['images', 'deploy'] }
     - { role: compose-services, tags: ['services', 'deploy'] }
