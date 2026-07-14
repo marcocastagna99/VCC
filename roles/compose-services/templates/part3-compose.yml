@@ -2,22 +2,29 @@ services:
   db:
     image: postgres:16
     environment:
-      # TODO
+      - POSTGRES_USER=forgejo
+      - POSTGRES_PASSWORD=forgejo_password
+      - POSTGRES_DB=forgejo
     volumes:
-      # TODO
+      - ./configs/pgsql/01-authelia.sh:/docker-entrypoint-initdb.d/01-authelia.sh:ro
     networks:
-      net:
+      - net
 
   authelia:
     image: authelia
     environment:
-      # TODO
+      - TZ=Europe/Rome
     labels:
-      # TODO
+      - "traefik.enable=true"
+      - "traefik.http.routers.authelia.rule=Host(`auth.vcc.local`)"
+      - "traefik.http.routers.authelia.entrypoints=websecure"
+      - "traefik.http.routers.authelia.tls=true"
     volumes:
-      # TODO
+      - ./configs/authelia:/config
     networks:
-      net:
+      - net
+    extra_hosts:
+      - "git.vcc.local:192.168.255.11"
 
   forgejo:
     image: forgejo
