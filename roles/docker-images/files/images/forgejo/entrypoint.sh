@@ -9,8 +9,9 @@ forgejo_cli() { sudo -u git forgejo --config /data/gitea/conf/app.ini "$@"; }
 
 #wait for the PostgreSQL database to be ready
 echo "Waiting for the database to be ready..."
-export PGPASSWORD=forgejo_password
-while ! psql -h db -U forgejo -d forgejo -c 'SELECT 1;' > /dev/null 2>&1; do
+export PGPASSWORD="$FORGEJO__database__PASSWD"
+
+while ! psql -h db -U forgejo -d forgejo -c 'SELECT 1;'; do
     echo "PostgreSQL is unavailable - sleeping..."
     sleep 2
 done
@@ -37,7 +38,7 @@ if [ ! -f /data/gitea/conf/app.ini ]; then
     echo "Creating admin user..."
     forgejo_cli admin user create \
         --admin \
-        --username admin \
+        --username siteadmin \
         --password admin \
         --email admin@vcc.local \
         --must-change-password=false
