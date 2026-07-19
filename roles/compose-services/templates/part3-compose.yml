@@ -37,7 +37,7 @@ services:
         - "traefik.http.routers.forgejo.rule=Host(`git.vcc.local`)"
         - "traefik.http.routers.forgejo.entrypoints=websecure"
         - "traefik.http.routers.forgejo.tls=true"
-        - "traefik.http.services.forgejo.loadbalancer.server.port=3000"
+        - "traefik.http.services.forgejo.loadbalancer.server.port=3200"
       volumes:
         - "{{ data_dir }}/forgejo:/data"
         - "{{ data_dir }}/configs/forgejo/forgejo.ini:/conf/app.ini:ro"
