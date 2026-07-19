@@ -86,16 +86,25 @@ identity_providers:
           AhGI3+asAk7/MkqaUiHlvq32FmuCqw==
           -----END PRIVATE KEY-----
     clients:
-# TODO: generate all OIDC clients using authelia_oidc_clients variable
-#{% for c in authelia_oidc_clients %}
-# ...
-#{% endfor %}
+{% for c in authelia_oidc_clients %}
+      - id: '{{ c.id }}'
+        secret: '{{ c.secret }}'
+        token_endpoint_auth_method: '{{ c.token_endpoint_auth_method }}'
+        authorization_policy: '{{ c.authorization_policy }}'
+        public: {{ c.public | lower }}
+        redirect_uris:
+{% for uri in c.redirect_uris %}
+          - '{{ uri }}'
+{% endfor %}
+        scopes:
+{% for scope in c.scopes %}
+          - '{{ scope }}'
+{% endfor %}
+{% endfor %}
 
 storage:
-  # local: 
-  #   path: /config/db.sqlite3
   postgres:
-    address: 'tcp://' # TODO: add the Postgres service hostname and port
+    address: 'tcp://db:5432'
     database: {{ authelia_db }}
     schema: public
     username: {{ authelia_db_user }}
