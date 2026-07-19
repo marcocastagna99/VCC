@@ -35,7 +35,6 @@ services:
         - "traefik.http.routers.forgejo.rule=Host(`git.vcc.local`)"
         - "traefik.http.routers.forgejo.entrypoints=websecure"
         - "traefik.http.routers.forgejo.tls=true"
-        # Forgejo ascolta internamente sulla porta 3000
         - "traefik.http.services.forgejo.loadbalancer.server.port=3000"
       volumes:
         - "{{ data_dir }}/forgejo:/data"
@@ -46,5 +45,4 @@ services:
       networks:
         - net
       extra_hosts:
-        # Risolve il dominio di Authelia puntandolo all'IP della macchina per l'OIDC
         - "auth.vcc.local:192.168.255.11"

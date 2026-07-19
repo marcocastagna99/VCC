@@ -20,6 +20,8 @@ docker_build_args:
 
 # data directory: where persistent data is stored on each target node
 data_dir: "/data"
+data: "{{ data_dir }}"
+nfs_dir: "{{ data_dir }}"
 
 #### COMPOSE #####
 
@@ -42,7 +44,7 @@ compose_nuke_config_directories: true # you WILL lose your data
 # List of files to deploy the compose from roles/compose-services/templates/
 compose_file_names:
   - traefik-compose.yml
-#  - part3-compose.yml # uncomment to enable part3 services
+  - part3-compose.yml # uncomment to enable part3 services
 compose_recreate: true # redeploy the compose stack
 
 # Enable/disable asserts 

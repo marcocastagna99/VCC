@@ -1,4 +1,4 @@
-SARG VERSION=11.0.8
+ARG VERSION=11.0.8
 FROM codeberg.org/forgejo/forgejo:${VERSION}
 
 # Install required dependencies for our custom entrypoint checks
