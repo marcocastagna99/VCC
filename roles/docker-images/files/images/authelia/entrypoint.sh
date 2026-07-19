@@ -6,8 +6,8 @@ MARKER="/config/.authelia-configured"
 
 #wait for the PostgreSQL database to be ready
 echo "Waiting for the PostgreSQL database on port 5432..."
-# Authelia image comes with netcat (nc) installed
-while ! nc -z db 5432; do
+
+while ! echo "" | nc -w 1 db 5432 > /dev/null 2>&1; do
     echo "PostgreSQL is unavailable - sleeping..."
     sleep 2
 done
