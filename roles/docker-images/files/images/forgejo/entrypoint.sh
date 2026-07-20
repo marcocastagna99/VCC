@@ -54,7 +54,7 @@ if [ ! -f /data/gitea/conf/app.ini ]; then
     # Configure OpenID Connect via Authelia
     echo "Configuring OpenID Connect via Authelia..."
     forgejo_cli admin auth add-oauth \
-        --name Authelia \
+        --name authelia \
         --provider openidConnect \
         --key forgejo \
         --secret forgejo_secret \
