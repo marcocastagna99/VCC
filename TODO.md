@@ -1,8 +1,8 @@
 
-- [ ] VCC-001: Implement the tasks for Docker installation
-- [ ] VCC-002: Implement tasks for NFS client setup. Make sure to use the storage network for NFS mount
-- [ ] VCC-003: Implement tasks for NFS server setup
-- [ ] VCC-004: Generate a jwks key for OIDC (RSA 4096 bits)
+- [x] VCC-001: Implement the tasks for Docker installation
+- [x] VCC-002: Implement tasks for NFS client setup. Make sure to use the storage network for NFS mount
+- [x] VCC-003: Implement tasks for NFS server setup
+- [x] VCC-004: Generate a jwks key for OIDC (RSA 4096 bits)
 - [ ] VCC-005: Add a new entrypoint for authelia and use it to replace the original
 - [ ] VCC-006: Create entrypoint for authelia. It should support replicated deployments
 - [ ] VCC-007: Add a new entrypoint for forgejo and use it to replace the original
