@@ -11,8 +11,8 @@
 - [x] VCC-010: Create entrypoint for grafana. It should support replicated deployments
 - [x] VCC-011: Configure Forgejo to use postgres
 - [x] VCC-012: Configure docker compose for postgres
-- [ ] VCC-012b: Create the database and the user for Authelia
-- [ ] VCC-012c: Create the database and the user for Grafana
+- [x] VCC-012b: Create the database and the user for Authelia
+- [x] VCC-012c: Create the database and the user for Grafana
 - [ ] VCC-013: Configure docker compose for forgejo
 - [ ] VCC-014: Configure docker compose for authelia
 - [ ] VCC-015: Enable HTTP to HTTPS redirection
