@@ -4,3 +4,41 @@ set -eu # fail on error
 # TODO[VCC-010]: Create entrypoint for grafana. It should support replicated deployments
 
 # Wait until database is alive. Grafana image comes with netcat (nc)
+echo "Waiting for the PostgreSQL database on port 5432..."
+while ! nc -w 1 db 5432 > /dev/null 2>&1; do
+    echo "PostgreSQL is unavailable - sleeping..."
+    sleep 2
+done
+echo "Database is alive and responding!"
+
+MARKER="/var/lib/grafana/.grafana-configured"
+LOCK_DIR="/var/lib/grafana/.grafana_init_lock"
+
+# Check if Grafana has been configured before
+if [ ! -f "$MARKER" ]; then
+    # Try to create lock directory atomically (Leader election)
+    if mkdir "$LOCK_DIR" 2>/dev/null; then
+        echo "First run detected (Leader). Initializing Grafana..."
+        
+        # We touch the marker immediately. Grafana will auto-migrate the DB 
+        # when the main process starts below.
+        touch "$MARKER"
+        echo "Marker file created by the Leader."
+    else
+        # Follower node behavior
+        echo "Initialization in progress by another replica. Waiting..."
+        while [ ! -f "$MARKER" ]; do
+            sleep 2
+        done
+        # Give the leader a small head start to ensure DB tables are actually created
+        # before followers try to access them simultaneously.
+        sleep 5
+        echo "Initialization marker found. Proceeding as Follower."
+    fi
+else
+    echo "Marker file found. Skipping initialization lock."
+fi
+
+echo "Starting Grafana application..."
+# /run.sh is the original default entrypoint for the official Grafana image
+exec /run.sh "$@"
