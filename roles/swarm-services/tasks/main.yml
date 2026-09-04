@@ -79,7 +79,20 @@
   loop: "{{ template_files | default([]) }}"
   loop_control:
     label: "{{ item.path }}"
+- name: Create secrets directory in {{ data_dir }}
+  ansible.builtin.file:
+    path: "{{ data_dir }}/secrets"
+    state: directory
+    mode: '0700'
 
+
+- name: Write vaulted db_password to file for Docker Swarm
+  ansible.builtin.copy:
+    dest: "{{ data_dir }}/secrets/db_password.txt"
+    content: "{{ db_password }}"
+    mode: '0600'
+
+    
 # start services
 
 - name: Deploy stack from a compose file

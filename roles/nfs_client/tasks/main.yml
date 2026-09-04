@@ -1,9 +1,8 @@
 ---
 # TODO[VCC-002]: Implement tasks for NFS client setup. Make sure to use the storage network for NFS mount
----
 - name: "Create NFS share directory"
   ansible.builtin.file:
-    path: "{{ data }}"
+    path: "{{ data_dir }}"
     state: directory
     mode: '0777'
 
@@ -15,7 +14,7 @@
 
 - name: Mount NFS share
   ansible.builtin.mount:
-    path: "{{ data }}"
+    path: "{{ data_dir }}"
     src: "storage.{{ domain_name }}:{{ nfs_dir }}"
     fstype: nfs
     opts: rw,sync,hard

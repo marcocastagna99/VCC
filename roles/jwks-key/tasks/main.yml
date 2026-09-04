@@ -3,18 +3,16 @@
 # (see jwks_key_path variable in group_vars/all.yml)
 # The generated key will be automatically injected in Authelia config using the entrypoint script of the Authelia container
 
----
 # tasks file for jwks-key
-
 - name: Ensure the destination directory for the JWKS key exists
   ansible.builtin.file:
-    path: "{{ jwks_key_path | dirname }}"
+    path: "{{ jwks_key_path }}"
     state: directory
     mode: '0755'
 
 - name: Generate a jwks key for OIDC (RSA 4096 bits)
   community.crypto.openssl_privatekey:
-    path: "{{ jwks_key_path }}"
+    path: "{{ jwks_key_path }}jwks.key"
     type: RSA
     size: 4096
     mode: '0600'
