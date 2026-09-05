@@ -26,26 +26,36 @@ services:
     networks:
       net:
 
-#  forgejo:
-#    # TODO[VCC-013]: Configure docker compose for forgejo
-#    image: "{{ registry_address }}/forgejo"
-#    healthcheck:
-#      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:{{ forgejo_port }}/"]
-#      interval: 5s
-#      timeout: 3s
-#      retries: 20
-#      start_period: 15s
-#    deploy:
-#      replicas: 2
-#    environment:
-#    volumes:
-#      - "{{ data_dir }}/forgejo:/data"
-#      - "{{ data_dir }}/configs/forgejo/forgejo.ini:/conf/app.ini:ro"
-#      - /etc/timezone:/etc/timezone:ro
-#      - /etc/localtime:/etc/localtime:ro
-#      - "{{ data_dir }}/certs/wildcard.crt:/usr/local/share/ca-certificates/wildcard.crt:ro"
-#    networks:
-#      net:
+  forgejo:
+      # TODO[VCC-013]: Configure docker compose for forgejo
+      image: "{{ registry_address }}/forgejo"
+      healthcheck:
+        test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:{{ forgejo_port }}/"]
+        interval: 5s
+        timeout: 3s
+        retries: 20
+        start_period: 15s
+      deploy:
+        replicas: 2
+      environment:
+        - DB_TYPE=postgres
+        - DB_HOST=vcc_db:5432
+        - DB_NAME={{ db_name }}
+        - DB_USER={{ db_user }}
+        - DB_PASSWD_FILE=/run/secrets/db_password
+      secrets:
+        - db_password
+        - forgejo_admin_password
+        - forgejo_oauth_secret
+        - forgejo_db_password
+      volumes:
+        - "{{ data_dir }}/forgejo:/data"
+        - "{{ data_dir }}/configs/forgejo/forgejo.ini:/conf/app.ini:ro"
+        - /etc/timezone:/etc/timezone:ro
+        - /etc/localtime:/etc/localtime:ro
+        - "{{ data_dir }}/certs/wildcard.crt:/usr/local/share/ca-certificates/wildcard.crt:ro"
+      networks:
+        - net
 
 #  authelia:
 #    # TODO[VCC-014]: Configure docker compose for authelia
@@ -69,4 +79,10 @@ secrets:
   jwks_key:
     file: "{{ data_dir }}/jwks/jwks.key"
   db_password:
+    file: "{{ data_dir }}/secrets/db_password.txt"
+  forgejo_admin_password:
+    file: "{{ data_dir }}/secrets/forgejo_admin_password.txt"
+  forgejo_oauth_secret:
+    file: "{{ data_dir }}/secrets/forgejo_oauth_secret.txt"
+  forgejo_db_password:
     file: "{{ data_dir }}/secrets/db_password.txt"

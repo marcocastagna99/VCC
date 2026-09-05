@@ -92,6 +92,18 @@
     content: "{{ db_password }}"
     mode: '0600'
 
+- name: Write vaulted forgejo_admin_password to file for Docker Swarm
+  ansible.builtin.copy:
+    dest: "{{ data_dir }}/secrets/forgejo_admin_password.txt"
+    content: "{{ forgejo_admin_password }}"
+    mode: '0600'
+
+- name: Write vaulted forgejo_oauth_secret to file
+  ansible.builtin.copy:
+    dest: "{{ data_dir }}/secrets/forgejo_oauth_secret.txt"
+    content: "{{ forgejo_oidc_client_secret }}"
+    mode: '0600'
+
     
 # start services
 

@@ -13,7 +13,7 @@
 - [x] VCC-012: Configure docker compose for postgres
 - [x] VCC-012b: Create the database and the user for Authelia
 - [x] VCC-012c: Create the database and the user for Grafana
-- [ ] VCC-013: Configure docker compose for forgejo
+- [x] VCC-013: Configure docker compose for forgejo
 - [ ] VCC-014: Configure docker compose for authelia
 - [ ] VCC-015: Enable HTTP to HTTPS redirection
 - [ ] VCC-016a: Configure Grafana to use Authelia for authentication
