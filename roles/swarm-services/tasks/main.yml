@@ -104,6 +104,12 @@
     content: "{{ forgejo_oidc_client_secret }}"
     mode: '0600'
 
+- name: Write vaulted authelia_db_password to file
+  ansible.builtin.copy:
+    dest: "{{ data_dir }}/secrets/authelia_db_password.txt"
+    content: "{{ authelia_db_password }}"
+    mode: '0600'
+
     
 # start services
 
