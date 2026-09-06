@@ -20,6 +20,8 @@ services:
       - "--entrypoints.websecure.address=:443"
       # redirect HTTP to HTTPS
       # TODO[VCC-015]: Enable HTTP to HTTPS redirection
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       # logging configuration
       - "--log.level=INFO"
       - "--log.format=console"
