@@ -45,6 +45,10 @@ services:
       - "{{ data_dir }}/configs/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro"
     networks:
       net:
+        aliases:
+          - "auth.{{ domain_name }}"
+          - "git.{{ domain_name }}"
+          - "mon.{{ domain_name }}"
 
 networks:
   net:

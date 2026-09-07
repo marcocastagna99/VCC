@@ -164,9 +164,21 @@ authelia_oidc_clients:
       - "openid"
       - "profile"
       - "email"
-      - "groups"
+      - "groups"   
   # grafana client
   # TODO [VCC-016b]: Add grafana OIDC client configuration
+  - id: "{{ grafana_oidc_client_id }}"
+    secret: "{{ grafana_oidc_client_secret }}"
+    token_endpoint_auth_method: 'client_secret_basic'
+    authorization_policy: 'one_factor'
+    public: false
+    redirect_uris:
+      - "https://mon.{{ domain_name }}/login/generic_oauth"
+    scopes:
+      - "openid"
+      - "profile"
+      - "email"
+      - "groups"
   
 # forgejo
 # admin and root are reserved names

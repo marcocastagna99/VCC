@@ -23,24 +23,26 @@ done
 echo "Database is alive and responding!"
 
 MARKER="/data/gitea/conf/app.ini"
-LOCK_DIR="/data/.forgejo_init_lock"
+LOCK_DIR="/data/gitea/.forgejo_init_lock"
+DONE_MARKER="/data/gitea/.forgejo_init_done"
+
+# created before Leader election to avoid race conditions
+mkdir -p /data/gitea
 
 # check if the configuration file exists to determine if this is the first run
-if [ ! -f "$MARKER" ]; then
-    # Try to create lock directory atomically (Leader election)
+if [ ! -f "$DONE_MARKER" ]; then
     if mkdir "$LOCK_DIR" 2>/dev/null; then
         echo "First run detected (Leader). Initializing Forgejo..."
         
-        mkdir -p /data/gitea
         mkdir -p /data/queues
         mkdir -p /data/gitea/conf
-        cp /conf/app.ini "$MARKER"
         
+        cp /conf/app.ini "$MARKER"
+
         # Fix permission for data directory
         chown -R git:git /data/gitea
         chown -R git:git /data/queues
 
-        # DB migration
         echo "Migrating forgejo database..."
         forgejo_cli migrate
 
@@ -53,9 +55,8 @@ if [ ! -f "$MARKER" ]; then
             --email admin@vcc.local \
             --must-change-password=false
 
-        # wait for Authelia to be ready
         echo "Waiting for Authelia to be ready..."
-        while ! curl -kfsS https://auth.vcc.local/api/health | grep -q '"status":"OK"'; do
+        while ! curl -kfsS http://authelia:9091/api/health | grep -q '"status":"OK"'; do
             echo "Authelia is unavailable - sleeping..."
             sleep 2
         done
@@ -70,11 +71,12 @@ if [ ! -f "$MARKER" ]; then
             --secret "$OAUTH_SECRET" \
             --auto-discover-url "https://auth.vcc.local/.well-known/openid-configuration"
             
+        touch "$DONE_MARKER" 
         echo "Initialization complete."
     else
         # Follower node behavior
         echo "Initialization in progress by another replica. Waiting..."
-        while [ ! -f "$MARKER" ]; do
+        while [ ! -f "$DONE_MARKER" ]; do
             sleep 2
         done
         echo "Initialization completed by the Leader."
@@ -84,5 +86,4 @@ else
 fi
 
 echo "Starting Forgejo application..."
-# exec "$@" will run the CMD specified in the Dockerfile
 exec "$@"

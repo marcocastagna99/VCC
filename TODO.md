@@ -16,8 +16,8 @@
 - [x] VCC-013: Configure docker compose for forgejo
 - [x] VCC-014: Configure docker compose for authelia
 - [x] VCC-015: Enable HTTP to HTTPS redirection
-- [ ] VCC-016a: Configure Grafana to use Authelia for authentication
-- [ ] VCC-016b: Add grafana OIDC client configuration
+- [x] VCC-016a: Configure Grafana to use Authelia for authentication
+- [x] VCC-016b: Add grafana OIDC client configuration
 - [x] VCC-017: Update Authelia configuration (see comments below)
 - [ ] VCC-018: Enable configuration to export metrics to Prometheus (Authelia)
 - [ ] VCC-019: Configure Postgres exporter
