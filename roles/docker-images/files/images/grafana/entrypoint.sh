@@ -1,6 +1,13 @@
 #!/bin/sh
 set -eu # fail on error
 
+# Update system certificates (we have root permissions at this point)
+echo "Updating CA certificates..."
+update-ca-certificates
+
+# Fix permissions to avoid write errors on mounted volumes
+chown -R grafana:root /var/lib/grafana
+
 # TODO[VCC-010]: Create entrypoint for grafana. It should support replicated deployments
 
 # Wait until database is alive. Grafana image comes with netcat (nc)
@@ -16,16 +23,16 @@ LOCK_DIR="/var/lib/grafana/.grafana_init_lock"
 
 # Check if Grafana has been configured before
 if [ ! -f "$MARKER" ]; then
-    # Try to create lock directory atomically (Leader election)
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
+    # Try to create lock directory atomically (Leader election) as the grafana user!
+    if su-exec grafana mkdir "$LOCK_DIR" 2>/dev/null; then
         echo "First run detected (Leader). Initializing Grafana..."
         
         # We touch the marker immediately. Grafana will auto-migrate the DB 
         # when the main process starts below.
-        touch "$MARKER"
+        su-exec grafana touch "$MARKER"
         echo "Marker file created by the Leader."
     else
-        # Follower node behavior
+        # Follower node
         echo "Initialization in progress by another replica. Waiting..."
         while [ ! -f "$MARKER" ]; do
             sleep 2
@@ -40,5 +47,6 @@ else
 fi
 
 echo "Starting Grafana application..."
-# /run.sh is the original default entrypoint for the official Grafana image
-exec /run.sh "$@"
+
+# Privilege Drop: switch to the grafana user to run the main process
+exec su-exec grafana /run.sh "$@"
