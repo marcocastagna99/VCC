@@ -78,7 +78,18 @@ prometheus.scrape "cadvisor_scraper" {
 
 // pgsql (https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.exporter.postgres/)
 // TODO[VCC-019]: Configure Postgres exporter
+prometheus.exporter.postgres "vcc_db" {
+  data_source_names = ["postgresql://{{ db_user }}:{{ db_password }}@db:5432/{{ db_name }}?sslmode=disable"]
+}
+prometheus.scrape "postgres_scraper" {
+  targets = prometheus.exporter.postgres.vcc_db.targets
+  job_name = "postgres_exporter"
 
+  scrape_interval = "{{ alloy_scrape_interval}}"
+  scrape_timeout  = "{{ alloy_scrape_timeout}}"
+
+  forward_to = [prometheus.relabel.metrics.receiver] 
+}
 // redis (https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.exporter.redis/)
 // TODO[VCC-021]: Configure Redis exporter
 

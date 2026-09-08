@@ -20,7 +20,7 @@
 - [x] VCC-016b: Add grafana OIDC client configuration
 - [x] VCC-017: Update Authelia configuration (see comments below)
 - [x] VCC-018: Enable configuration to export metrics to Prometheus (Authelia)
-- [ ] VCC-019: Configure Postgres exporter
+- [x] VCC-019: Configure Postgres exporter
 - [ ] VCC-020: Enable configuration to export metrics to Prometheus (Forgejo)
 - [ ] VCC-021: Configure Redis exporter
 - [ ] VCC-022: Configure Authelia exporter
