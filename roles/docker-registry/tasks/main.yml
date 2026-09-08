@@ -59,7 +59,7 @@
 - name: Deploy a docker registry
   community.docker.docker_stack:
     name: registry
-    detach: false
+   # detach: false   #Unsupported parameters for (community.docker.docker_stack) module: detach
     prune: true
     compose:
       - /opt/docker-registry.yml

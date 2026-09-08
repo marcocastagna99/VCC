@@ -5,7 +5,7 @@
       community.docker.docker_stack:
         state: absent
         name: vcc
-        detach: false
+        #detach: false  #Unsupported parameters for (community.docker.docker_stack) module: detach
       when: stack_recreate
 
     - name: Delete directories in {{ data_dir}}
@@ -118,7 +118,7 @@
     state: present
     name: vcc
     prune: true
-    detach: false
+    #detach: false  #Unsupported parameters for (community.docker.docker_stack) module: detach
   #  with_registry_auth: true
     compose: "{{ ['/opt/'] | product(stack_file_names) | map('join') | list }}" # this is evil
   # retry the task that may fail
