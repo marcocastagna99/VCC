@@ -92,6 +92,19 @@ prometheus.scrape "postgres_scraper" {
 }
 // redis (https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.exporter.redis/)
 // TODO[VCC-021]: Configure Redis exporter
+prometheus.exporter.redis "vcc_redis" {
+  redis_addr = "redis:6379"
+}
+
+prometheus.scrape "redis_scraper" {
+  targets  = prometheus.exporter.redis.vcc_redis.targets
+  job_name = "redis_exporter"
+
+  scrape_interval = "{{ alloy_scrape_interval}}"
+  scrape_timeout  = "{{ alloy_scrape_timeout}}"
+
+  forward_to = [prometheus.relabel.metrics.receiver]
+}
 
 // traefik
 

@@ -21,8 +21,8 @@
 - [x] VCC-017: Update Authelia configuration (see comments below)
 - [x] VCC-018: Enable configuration to export metrics to Prometheus (Authelia)
 - [x] VCC-019: Configure Postgres exporter
-- [ ] VCC-020: Enable configuration to export metrics to Prometheus (Forgejo)
-- [ ] VCC-021: Configure Redis exporter
+- [x] VCC-020: Enable configuration to export metrics to Prometheus (Forgejo)
+- [x] VCC-021: Configure Redis exporter
 - [ ] VCC-022: Configure Authelia exporter
 - [ ] VCC-023: Configure Forgejo exporter
 - [ ] VCC-024: Create meaningful Grafana dashboards (do NOT import ready-made dashboards)
