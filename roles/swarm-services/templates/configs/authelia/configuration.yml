@@ -71,3 +71,7 @@ notifier:
     filename: /config/notification.txt
 
 # TODO[VCC-018]: Enable configuration to export metrics to Prometheus (Authelia)
+telemetry:
+  metrics:
+    enabled: true
+    address: 'tcp://0.0.0.0:9959'
