@@ -55,12 +55,12 @@ if [ ! -f "$DONE_MARKER" ]; then
             --email admin@vcc.local \
             --must-change-password=false
 
-        echo "Waiting for Authelia to be ready..."
-        while ! curl -kfsS http://authelia:9091/api/health | grep -q '"status":"OK"'; do
-            echo "Authelia is unavailable - sleeping..."
+        echo "Waiting for Authelia to be ready via Traefik..."
+        while ! curl -kfsS https://auth.vcc.local/.well-known/openid-configuration > /dev/null; do
+            echo "Authelia is unavailable (or Traefik is not routing yet) - sleeping..."
             sleep 2
         done
-        echo "Authelia is alive!"
+        echo "Authelia is alive and routing correctly!"
 
         # Configure OpenID Connect via Authelia using the secret variable
         echo "Configuring OpenID Connect via Authelia..."
