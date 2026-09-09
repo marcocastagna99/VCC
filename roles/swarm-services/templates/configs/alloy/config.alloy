@@ -180,8 +180,9 @@ discovery.relabel "authelia_targets" {
     action        = "keep"
   }
 
-
   rule {
+    
+    // set __address__ to the container's network IP + metrics port
     source_labels = ["__meta_docker_network_ip"]
     target_label  = "__address__"
     replacement   = "$1:9959"
@@ -200,6 +201,33 @@ prometheus.scrape "authelia_metrics" {
 
 // forgejo exporter
 // TODO[VCC-023]: Configure Forgejo exporter
+discovery.relabel "forgejo_targets" {
+  targets = discovery.docker.discovery_docker.targets
+
+  // keep only forgejo service
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_swarm_service_name"]
+    regex         = "vcc_forgejo"
+    action        = "keep"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_network_ip"]
+    target_label  = "__address__"
+    replacement   = "$1:3200"
+    action        = "replace"
+  }
+}
+
+prometheus.scrape "forgejo_metrics" {
+  targets  = discovery.relabel.forgejo_targets.output
+  job_name = "forgejo"
+
+  scrape_interval = "{{ alloy_scrape_interval}}"
+  scrape_timeout  = "{{ alloy_scrape_timeout}}"
+
+  forward_to = [prometheus.relabel.metrics.receiver]
+}
 
 // Define a relabeling rule to add the node name as a label
 prometheus.relabel "metrics" {
