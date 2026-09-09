@@ -171,6 +171,32 @@ prometheus.relabel "traefik_instance" {
 
 // authelia exporter
 // TODO[VCC-022]: Configure Authelia exporter
+discovery.relabel "authelia_targets" {
+  targets = discovery.docker.discovery_docker.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_swarm_service_name"]
+    regex         = "vcc_authelia"
+    action        = "keep"
+  }
+
+
+  rule {
+    source_labels = ["__meta_docker_network_ip"]
+    target_label  = "__address__"
+    replacement   = "$1:9959"
+  }
+}
+
+prometheus.scrape "authelia_metrics" {
+  targets = discovery.relabel.authelia_targets.output
+  job_name = "authelia"
+
+  scrape_interval = "{{ alloy_scrape_interval}}"
+  scrape_timeout  = "{{ alloy_scrape_timeout}}"
+
+  forward_to = [prometheus.relabel.metrics.receiver]
+}
 
 // forgejo exporter
 // TODO[VCC-023]: Configure Forgejo exporter
