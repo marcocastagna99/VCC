@@ -26,5 +26,5 @@
 - [x] VCC-022: Configure Authelia exporter
 - [x] VCC-023: Configure Forgejo exporter
 - [ ] VCC-024: Create meaningful Grafana dashboards (do NOT import ready-made dashboards)
-- [ ] VCC-025: Vault all cleartext secrets/passwords
+- [x] VCC-025: Vault all cleartext secrets/passwords
 - [ ] VCC-026-FINAL: Verify all conditions before delivering the project
