@@ -27,6 +27,10 @@ services:
       - "--log.format=console"
       - "--accesslog=true"
       - "--accesslog.format=common"
+      # enable prometheus metrics on a dedicated port
+      - "--metrics.prometheus=true"
+      - "--entrypoints.metrics.address=:9100"
+      - "--metrics.prometheus.entrypoint=metrics"
     ports:
       - target: 443
         published: 443
