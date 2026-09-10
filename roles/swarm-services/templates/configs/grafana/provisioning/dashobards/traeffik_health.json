@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 0,
   "links": [],
   "panels": [
     {
@@ -26,6 +26,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Displays the average HTTP response time (latency) per backend service. Calculated by dividing the total request duration by the request count over a 5-minute rolling window. Connections closed without a response (code=\"0\") are filtered out to prevent artificially skewed metrics",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -78,7 +79,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "s"
         },
         "overrides": []
       },
@@ -91,14 +93,20 @@
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -106,13 +114,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(rate(traefik_service_request_duration_seconds_sum[5m])) \r\n/ \r\nsum(rate(traefik_service_request_duration_seconds_count[5m]))",
-          "legendFormat": "__auto",
+          "expr": "sum by (service) (rate(traefik_service_request_duration_seconds_sum{service=~\"$Service\", code!~\"0\", protocol=\"http\"}[5m]))\r\n/\r\nsum by (service) (rate(traefik_service_request_duration_seconds_count{service=~\"$Service\", code!~\"0\", protocol=\"http\"}[5m]))",
+          "legendFormat": "{{service}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New panel",
+      "title": "Average Response Time per Service",
       "type": "timeseries"
     },
     {
@@ -154,7 +162,7 @@
           "refId": "A"
         }
       ],
-      "title": "Traeffik Logs",
+      "title": "Traefik Logs Stream",
       "type": "logs"
     },
     {
@@ -162,6 +170,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Displays the HTTP request rate per second (req/s) handled by Traefik, broken down by response status code. The value indicates the average incoming traffic rate, calculated over a 5-minute rolling window (rate) to smooth out temporary spikes.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -214,7 +223,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "reqps"
         },
         "overrides": []
       },
@@ -246,21 +256,52 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(traefik_entrypoint_requests_total[5m])) by (code)",
+          "expr": "sum by (code) (rate(traefik_service_requests_total{service=~\"$Service\", code!~\"0\", protocol=\"http\"}[5m]))",
           "legendFormat": "HTTP {{code}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total HTTP traffic (per status code)",
+      "title": "Total HTTP Traffic (by status code)",
       "type": "timeseries"
     }
   ],
   "preload": false,
   "schemaVersion": 42,
-  "tags": [],
+  "tags": [
+    "metrics",
+    "logs"
+  ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": "",
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(traefik_service_requests_total,service)",
+        "description": "",
+        "includeAll": true,
+        "multi": true,
+        "name": "Service",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(traefik_service_requests_total,service)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "staticOptions": [],
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -268,7 +309,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "traeffik",
+  "title": "traefik",
   "uid": "ad2j5hn",
-  "version": 7
+  "version": 37
 }
