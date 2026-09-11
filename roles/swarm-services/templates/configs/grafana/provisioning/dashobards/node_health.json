@@ -53,7 +53,8 @@
                 "value": 86
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -87,7 +88,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\", instance=~\"$Node\"}[5m])) * 100)",
+          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\", host=~\"$Node\"}[5m])) * 100)",
           "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
@@ -147,7 +148,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "count(node_cpu_seconds_total{mode=\"idle\", instance=~\"$Node\"})",
+          "expr": "count(node_cpu_seconds_total{mode=\"idle\", host=~\"$Node\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -218,8 +219,8 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "(1 - (node_memory_MemAvailable_bytes{instance=~\"$Node\"} / node_memory_MemTotal_bytes{instance=~\"$Node\"})) * 100",
-          "legendFormat": "__auto",
+          "expr": "(\r\n  1 - (\r\n    node_memory_MemAvailable_bytes{host=~\"$Node\"} \r\n    / \r\n    node_memory_MemTotal_bytes{host=~\"$Node\"}\r\n  )\r\n) * 100 \r\nand on (instance) \r\n(up{job=\"integrations/unix\"} == 1)",
+          "legendFormat": "{{host}}",
           "range": true,
           "refId": "A"
         }
@@ -298,7 +299,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "(\r\n  1 - (\r\n    node_filesystem_free_bytes{mountpoint=\"/etc/hosts\", instance=~\"$Node\"}\r\n    /\r\n    node_filesystem_size_bytes{mountpoint=\"/etc/hosts\", instance=~\"$Node\"}\r\n  )\r\n) * 100",
+          "expr": "(\r\n  1 - (\r\n    node_filesystem_free_bytes{mountpoint=\"/etc/hosts\", host=~\"$Node\"}\r\n    /\r\n    node_filesystem_size_bytes{mountpoint=\"/etc/hosts\", host=~\"$Node\"}\r\n  )\r\n) * 100",
           "format": "table",
           "legendFormat": "__auto",
           "range": true,
@@ -318,16 +319,16 @@
       {
         "allowCustomValue": false,
         "current": {
-          "text": "df5f8bbd2b89",
-          "value": "df5f8bbd2b89"
+          "text": "node1",
+          "value": "node1"
         },
-        "definition": "label_values(node_uname_info,nodename)",
+        "definition": "label_values(node_uname_info,host)",
         "description": "",
         "name": "Node",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(node_uname_info,nodename)",
+          "query": "label_values(node_uname_info,host)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -337,12 +338,12 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "node_health",
   "uid": "adtnvfx",
-  "version": 20
+  "version": 26
 }
