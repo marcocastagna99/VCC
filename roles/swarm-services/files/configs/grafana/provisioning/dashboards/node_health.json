@@ -829,8 +829,8 @@
       {
         "allowCustomValue": false,
         "current": {
-          "text": "node2",
-          "value": "node2"
+          "text": "node1",
+          "value": "node1"
         },
         "definition": "label_values(node_uname_info,host)",
         "description": "",
@@ -848,12 +848,12 @@
     ]
   },
   "time": {
-    "from": "2026-09-11T09:56:14.974Z",
-    "to": "2026-09-11T10:09:04.143Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "node_health",
   "uid": "adtnvfx",
-  "version": 47
+  "version": 48
 }

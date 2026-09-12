@@ -110,6 +110,11 @@
     content: "{{ authelia_db_password }}"
     mode: '0600'
 
+- name: Copy static Grafana dashboards
+  ansible.builtin.copy:
+    src: configs/grafana/provisioning/dashboards/
+    dest: "{{ data_dir }}/configs/grafana/provisioning/dashboards/"
+    mode: '0644'
     
 # start services
 

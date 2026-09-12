@@ -65,8 +65,10 @@ services:
       #           - A log panel below that automatically follows the time window.
       #     4) Export the dashboards and configure Grafana provisioning
       #        so they load automatically at startup.
+      - "{{ data_dir }}/configs/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro"
       # required for SSO to work
       - "{{ data_dir }}/certs/wildcard.crt:/usr/local/share/ca-certificates/wildcard.crt:ro"
+    
     networks:
       net:
 
