@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -760,7 +760,7 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
                 "color": "green",
@@ -855,5 +855,5 @@
   "timezone": "browser",
   "title": "node_health",
   "uid": "adtnvfx",
-  "version": 48
+  "version": 1
 }
