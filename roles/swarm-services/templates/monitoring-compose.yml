@@ -90,7 +90,7 @@ services:
     # expose port for metrics scraping
     command: ["run", "/etc/alloy/config.alloy", "--server.http.listen-addr=0.0.0.0:{{ alloy_port }}"]
     deploy:
-      mode: global
+      mode: global #one for each phisical node
 {% if not production_mode %}
     ports:
       - target: {{ alloy_port }}

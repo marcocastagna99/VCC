@@ -32,7 +32,7 @@
 ## check exports
 - block:
   - name: Apply notifiers
-    ansible.builtin.meta: flush_handlers
+    ansible.builtin.meta: flush_handlers # Flush any pending handlers instead of waiting until the end of the playbook
   - name: Get verbose export list
     ansible.builtin.command: exportfs -v
     register: exportfs_verbose
@@ -40,7 +40,7 @@
   - name: Assert that the export exists with correct options
     ansible.builtin.assert:
       that:
-        - exportfs_verbose.stdout is search(storage_network | regex_escape ~ '\\s*\\(.*rw.*no_root_squash.*\\)')
+        - exportfs_verbose.stdout is search(storage_network | regex_escape ~ '\\s*\\(.*rw.*no_root_squash.*\\)') # Ensures the NFS export is correctly configured with read/write and no_root_squash permissions
       fail_msg: "Export for {{ storage_network }} is missing or has incorrect options"
   when: enable_asserts
 

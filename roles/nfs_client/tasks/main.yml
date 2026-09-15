@@ -17,7 +17,7 @@
     path: "{{ data_dir }}"
     src: "storage.{{ domain_name }}:{{ nfs_dir }}"
     fstype: nfs
-    opts: rw,sync,hard
+    opts: rw,sync,hard # rw = read/write access; sync = writes data directly to disk without caching (prevents data corruption); hard = freezes client requests if the server drops instead of crashing the app
     state: mounted
 
 ## check mount
