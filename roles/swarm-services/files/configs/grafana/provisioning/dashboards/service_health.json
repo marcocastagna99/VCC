@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -185,7 +185,7 @@
         {
           "editorMode": "code",
           "expr": "sum by (code, service) (rate(traefik_service_requests_total{service=~\".*$job.*\", code=~\"4..|5..\"}[5m]))",
-          "legendFormat": "{{{{code}} Errors ({{service}})}}",
+          "legendFormat": "HTTP {{code}} - ({{service}})",
           "range": true,
           "refId": "A"
         }
@@ -273,5 +273,5 @@
   "timezone": "browser",
   "title": "service_health",
   "uid": "adxhl4t",
-  "version": 9
+  "version": 1
 }
