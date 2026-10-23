@@ -25,7 +25,7 @@ if [ ! -f "$MARKER" ]; then
         
         # Inject jwks key from secrets
         echo "Injecting jwks key from secrets"
-        # keep space indentation for yaml (ugh!)
+        # keep space indentation for yaml
         JWKS_KEY=$(sed 's/^/          /' "$SECRET_FILE")
         sed -i '/JWKS_PRIVATE_KEY_CONTENT/{
             r /dev/stdin
